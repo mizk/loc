@@ -63,7 +63,7 @@ func LoadTitle(lang string) *Title {
 func RestoreStrings(translate map[string]string, lang, output string) error {
 	outputDir := path.Join(output, strings.ToLower(lang))
 	if !IsDir(outputDir) {
-		err := os.MkdirAll(outputDir, 0x666)
+		err := os.MkdirAll(outputDir, 0666)
 		if err != nil {
 			log.Println(err)
 			return err
