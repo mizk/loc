@@ -22,8 +22,8 @@ func main() {
 //restore
 func addRestoreCommand(root *cobra.Command) {
 	command := &cobra.Command{
-		Use:   "restore ${input} ${output}",
-		Short: "restore --lang=${lang} ${translate} ${output} 使用翻译文件还原strings文件",
+		Use:   "restore {--lang=lang} {excel} {strings}",
+		Short: "restore {--lang=lang} {excel} {strings} 使用EXCEL文件生成strings文件",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) < 2 {
 				cmd.Usage()
@@ -51,15 +51,15 @@ func addRestoreCommand(root *cobra.Command) {
 
 		},
 	}
-	command.PersistentFlags().String("lang", "base", "语言类型")
+	command.PersistentFlags().String("lang", "zh_CN", "语言类型,lang只能是如下值:zh_CN,zh_Hans,en_US,ja_JP,ko_KR")
 	root.AddCommand(command)
 }
 
 //patch
 func addPatchCommand(root *cobra.Command) {
 	command := &cobra.Command{
-		Use:   "patch ${patch} ${translate}",
-		Short: "patch ${patch} ${translate}  使用strings或现有的翻译文件更新翻译文件",
+		Use:   "patch {--lang=lang} {patch} {translate}",
+		Short: "patch {--lang=lang} {patch} {translate}  使用strings或现有的Excel文件更s新Excel",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) < 2 {
 				cmd.Usage()
@@ -106,15 +106,15 @@ func addPatchCommand(root *cobra.Command) {
 			}
 		},
 	}
-	command.PersistentFlags().String("lang", "base", "语言类型")
+	command.PersistentFlags().String("lang", "zh_CN", "语言类型,lang只能是如下值:zh_CN,zh_Hans,en_US,ja_JP,ko_KR")
 	root.AddCommand(command)
 }
 
 //
 func addInitCommand(root *cobra.Command) {
 	command := &cobra.Command{
-		Use:   "init ${strings} ${output}",
-		Short: "init ${strings} ${output} 使用strings文件生成翻译文件",
+		Use:   "init {--lang=lang} {strings} {excel}",
+		Short: "init {--lang=lang} {strings} {excel} 使用strings文件生成EXCEL文件",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) < 2 {
 				cmd.Usage()
@@ -135,7 +135,7 @@ func addInitCommand(root *cobra.Command) {
 			utils.SaveRecords(output, language, records, title)
 		},
 	}
-	command.PersistentFlags().String("lang", "base", "语言类型")
+	command.PersistentFlags().String("lang", "zh_CN", "语言类型,lang只能是如下值:zh_CN,zh_Hans,en_US,ja_JP,ko_KR")
 	root.AddCommand(command)
 }
 
@@ -143,13 +143,13 @@ func parseLangFlag(command *cobra.Command) string {
 	language := ""
 	lang := command.Flag("lang")
 	if lang == nil {
-		log.Println("不受支持的语言,lang只能是如下值:base,zh_CN,zh_Hans,en_US,ja_JP,ko_KR")
+		log.Println("不受支持的语言,lang只能是如下值:zh_CN,zh_Hans,en_US,ja_JP,ko_KR")
 		return ""
 	}
 	language = lang.Value.String()
-	valid := language == "base" || language == "zh_CN" || language == "en_US" || language == "ja_JP" || language == "zh_Hans" || language == "ko_KR"
+	valid := language == "zh_CN" || language == "en_US" || language == "ja_JP" || language == "zh_Hans" || language == "ko_KR"
 	if !valid {
-		log.Println("不受支持的语言,lang只能是如下值:base,zh_CN,zh_Hans,en_US,ja_JP,ko_KR")
+		log.Println("不受支持的语言,lang只能是如下值:zh_CN,zh_Hans,en_US,ja_JP,ko_KR")
 		return ""
 	}
 	return language
