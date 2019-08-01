@@ -12,7 +12,10 @@ const PathSeparator = string(os.PathSeparator)
 
 func main() {
 
-	root := &cobra.Command{}
+	root := &cobra.Command{
+		Use:   "loc",
+		Short: "loc 将strings文件内容转换为Excel格式",
+	}
 	addInitCommand(root)
 	addPatchCommand(root)
 	addRestoreCommand(root)
@@ -22,8 +25,8 @@ func main() {
 //restore
 func addRestoreCommand(root *cobra.Command) {
 	command := &cobra.Command{
-		Use:   "restore {--lang=lang} {excel} {strings}",
-		Short: "restore {--lang=lang} {excel} {strings} 使用EXCEL文件生成strings文件",
+		Use:   "restore",
+		Short: "loc restore {excel} {strings} 使用EXCEL文件生成strings文件",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) < 2 {
 				cmd.Usage()
@@ -40,7 +43,7 @@ func addRestoreCommand(root *cobra.Command) {
 			}
 
 			if !strings.HasSuffix(input, ".xlsx") {
-				log.Println("翻译文件必须是xlsx类型")
+				log.Println("必须是xlsx类型")
 				return
 			}
 			translate := utils.ReadExcel(input, language)
@@ -58,8 +61,8 @@ func addRestoreCommand(root *cobra.Command) {
 //patch
 func addPatchCommand(root *cobra.Command) {
 	command := &cobra.Command{
-		Use:   "patch {--lang=lang} {patch} {translate}",
-		Short: "patch {--lang=lang} {patch} {translate}  使用strings或现有的Excel文件更s新Excel",
+		Use:   "patch",
+		Short: "patch {excel|strings} {excel}  使用strings或现有的Excel文件更新Excel",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) < 2 {
 				cmd.Usage()
@@ -72,7 +75,7 @@ func addPatchCommand(root *cobra.Command) {
 			}
 			input := args[1]
 			if ok, err := utils.PathExists(input); err != nil || ok == false {
-				log.Println("缺少翻译文件")
+				log.Println("缺少EXCEL文件")
 				return
 			}
 			language := parseLangFlag(cmd)
@@ -91,7 +94,7 @@ func addPatchCommand(root *cobra.Command) {
 					translate[record.Key] = record.Value
 				}
 			} else {
-				log.Println("patch文件必须是xlsx或strings类型")
+				log.Println("文件必须是xlsx或strings类型")
 				return
 			}
 			rd := utils.ReadExcel(input, language)
@@ -113,8 +116,8 @@ func addPatchCommand(root *cobra.Command) {
 //
 func addInitCommand(root *cobra.Command) {
 	command := &cobra.Command{
-		Use:   "init {--lang=lang} {strings} {excel}",
-		Short: "init {--lang=lang} {strings} {excel} 使用strings文件生成EXCEL文件",
+		Use:   "init",
+		Short: "loc init {strings} {excel} 使用strings文件生成EXCEL文件",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) < 2 {
 				cmd.Usage()

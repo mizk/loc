@@ -25,10 +25,6 @@ type Record struct {
 func LoadTitle(lang string) *Title {
 	title := `
 	{
-	  "base": {
-		"keyword": "关键词",
-		"value": "翻译"
-	  },
 	  "zh_CN": {
 		"keyword": "关键词",
 		"value": "翻译"
