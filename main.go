@@ -1,8 +1,8 @@
 package main
 
 import (
+	"github.com/mizk/loc/utils"
 	"github.com/spf13/cobra"
-	"loc/utils"
 	"log"
 	"os"
 	"strings"
